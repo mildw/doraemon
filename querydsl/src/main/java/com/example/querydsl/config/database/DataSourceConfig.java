@@ -1,4 +1,4 @@
-package com.example.jpa.config.database;
+package com.example.querydsl.config.database;
 
 
 import com.zaxxer.hikari.HikariConfig;
@@ -27,7 +27,7 @@ import java.util.Properties;
 
 @Configuration
 @RequiredArgsConstructor
-@EnableJpaRepositories(basePackages = {"com.example.jpa.domain"})
+@EnableJpaRepositories(basePackages = {"com.example.querydsl.domain"})
 public class DataSourceConfig {
 
     private final ConfigurableEnvironment environment;
@@ -47,7 +47,7 @@ public class DataSourceConfig {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setDataSource(dataSource());
-        factory.setPackagesToScan("com.example.jpa.domain");
+        factory.setPackagesToScan("com.example.querydsl.domain");
         factory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
         factory.setJpaProperties(getProperties(environment));
 

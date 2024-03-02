@@ -1,4 +1,4 @@
-package com.example.jpa.domain.member;
+package com.example.querydsl.domain.member;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -8,7 +8,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
-import static com.example.jpa.domain.member.QMember.member;
+import static com.example.querydsl.domain.member.QMember.member;
 
 public class MemberRepositoryDslImpl extends QuerydslRepositorySupport implements MemberRepositoryDsl{
     public MemberRepositoryDslImpl() {

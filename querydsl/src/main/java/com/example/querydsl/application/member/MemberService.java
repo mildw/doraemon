@@ -1,7 +1,7 @@
-package com.example.jpa.application.member;
+package com.example.querydsl.application.member;
 
-import com.example.jpa.domain.member.Member;
-import com.example.jpa.domain.member.MemberRepository;
+import com.example.querydsl.domain.member.Member;
+import com.example.querydsl.domain.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

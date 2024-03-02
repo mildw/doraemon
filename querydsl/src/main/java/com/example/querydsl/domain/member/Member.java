@@ -1,4 +1,4 @@
-package com.example.jpa.domain.member;
+package com.example.querydsl.domain.member;
 
 import lombok.AccessLevel;
 import lombok.Getter;
