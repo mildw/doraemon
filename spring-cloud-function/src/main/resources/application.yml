@@ -1,0 +1,6 @@
+KAFKA_BROKERS: "localhost:9092"
+DB_URL: jdbc:mariadb://localhost:3306/test
+#DB_BO_URL: jdbc:mariadb://localhost:3306/test1
+#DB_TENANT_URL: jdbc:mariadb://localhost:3306/test2
+DB_USER: root
+DB_PASSWORD: 1111

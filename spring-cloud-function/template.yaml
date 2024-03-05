@@ -1,0 +1,19 @@
+Resources:
+  Writer:
+    Type: AWS::Serverless::Function
+    Properties:
+      Timeout: 300
+      MemorySize: 128
+      CodeUri: spring-cloud-function
+      Handler: com.example.springcloudfunction.function.ExampleFunction::apply
+      Runtime: java11
+      Architectures:
+        - x86_64
+      Environment:
+        Variables:
+          KAFKA_BROKERS: "localhost:9092"
+          DB_URL: jdbc:mariadb://localhost:3306/test
+#          DB_BO_URL: jdbc:mariadb://localhost:3306/test1
+#          DB_TENANT_URL: jdbc:mariadb://localhost:3306/test2
+          DB_USER: root
+          DB_PASSWORD: 1111
