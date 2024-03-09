@@ -9,7 +9,6 @@ import java.util.function.Function;
 @Component
 public class ExampleFunction implements Function<String, String> {
 
-
     @Override
     public String apply(String request) {
 
