@@ -33,10 +33,9 @@ public class GptService {
     }
 
     private GeminiRs requestGeminiWork(String prompt) {
-        String model = "generateContent";
         String apiKey = "";
         GeminiRq rq = new GeminiRq(prompt);
-        GeminiRs rs = geminiClient.chat(model, apiKey, rq);
+        GeminiRs rs = geminiClient.chat(apiKey, rq);
         return rs;
     }
 

@@ -8,9 +8,8 @@ import org.springframework.web.bind.annotation.*;
 @FeignClient(name = "gemini", url = "https://generativelanguage.googleapis.com")
 public interface GeminiClient {
 
-    @PostMapping("/v1beta/models/gemini-pro:{model}")
+    @PostMapping("/v1beta/models/gemini-pro:generateContent")
     GeminiRs chat(
-            @PathVariable("model") String model,
             @RequestParam("key") String key,
             @RequestBody GeminiRq rq);
 
