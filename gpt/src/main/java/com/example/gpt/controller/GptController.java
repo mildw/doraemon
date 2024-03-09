@@ -14,7 +14,11 @@ public class GptController {
 
     @GetMapping("/gpt")
     public String gpt(@RequestParam String prompt) {
-        return gptService.chat(prompt);
+        return gptService.gptChat(prompt);
     }
 
+    @GetMapping("/gemini")
+    public Object gemini(@RequestParam String prompt) {
+        return gptService.geminiChat(prompt);
+    }
 }

@@ -7,10 +7,12 @@ import lombok.Setter;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GptRs {
-    private List<GptChoice> gptChoices;
+public class GeminiCandidate {
+  public GeminiContent content;
+  public String finishReason;
+  public int index;
+  public List<GeminiSafetyRating> safetyRatings;
 }

@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class Message {
-    private String role;
-    private String content;
+public class GptChoice {
+    private int index;
+    private GptMessage gptMessage;
 }

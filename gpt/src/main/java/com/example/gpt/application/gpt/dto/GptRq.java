@@ -12,14 +12,14 @@ import java.util.List;
 @AllArgsConstructor
 public class GptRq {
     private String model;
-    private List<Message> messages;
+    private List<GptMessage> gptMessages;
 //    private int n;
 //    private double temperature;
 
     public GptRq(String model, String prompt) {
         this.model = model;
-        this.messages = new ArrayList<>();
+        this.gptMessages = new ArrayList<>();
 //        this.n = 0;
-        this.messages.add(new Message("user", prompt));
+        this.gptMessages.add(new GptMessage("user", prompt));
     }
 }
