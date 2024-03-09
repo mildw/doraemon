@@ -8,7 +8,11 @@ public class TenantIdentifierResolver implements CurrentTenantIdentifierResolver
 
     @Override
     public String resolveCurrentTenantIdentifier() {
-        return TenantContextHolder.getDatabaseName();
+        try {
+            return TenantContextHolder.getDatabaseName();
+        } catch (Exception e) {
+            return "common";
+        }
     }
 
     @Override
