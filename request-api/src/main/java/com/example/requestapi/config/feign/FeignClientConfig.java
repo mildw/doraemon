@@ -3,14 +3,26 @@ package com.example.requestapi.config.feign;
 import feign.Request;
 import feign.Retryer;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.cloud.openfeign.FeignFormatterRegistrar;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
 
 import java.util.concurrent.TimeUnit;
 
 @EnableFeignClients(basePackages = "com.example.requestapi.application")
 @Configuration
 public class FeignClientConfig {
+
+    @Bean
+    public FeignFormatterRegistrar localDateFeignFormatterRegister() {
+        // local date time 사용시 문제가 될 수 있다. Iso 변환 처리
+        return registry -> {
+            DateTimeFormatterRegistrar registrar = new DateTimeFormatterRegistrar();
+            registrar.setUseIsoFormat(true);
+            registrar.registerFormatters(registry);
+        };
+    }
 
     @Bean
     public Request.Options options() {
