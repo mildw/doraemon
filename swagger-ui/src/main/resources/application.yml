@@ -9,3 +9,18 @@ server:
       enabled: false
   tomcat:
     use-relative-redirects: true
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui
+#    disable-swagger-default-url: true
+    display-request-duration: true
+    tags-sorter: alpha
+    operations-sorter: alpha
+    doc-expansion: none
+    urls-primary-name: TEST API
+    persist-authorization: true
+    query-config-enabled: true
+    syntax-highlight:
+      theme: nord
+  pre-loading-enabled: true
