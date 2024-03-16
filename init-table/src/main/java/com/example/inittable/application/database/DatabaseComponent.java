@@ -1,4 +1,4 @@
-package com.example.jpa.application.database;
+package com.example.inittable.application.database;
 
 import com.zaxxer.hikari.HikariConfig;
 import lombok.RequiredArgsConstructor;

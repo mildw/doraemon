@@ -1,4 +1,4 @@
-package com.example.jpa;
+package com.example.inittable;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

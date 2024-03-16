@@ -1,6 +1,5 @@
-package com.example.jpa.application.database;
+package com.example.inittable.application.database;
 
-import com.example.core.multitenancy.TenantContextHolder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
@@ -19,9 +18,9 @@ public class DatabaseService {
 
     private final DatabaseComponent databaseComponent;
 
-    public Boolean initTable() {
+    public Boolean initTable(String schema) {
         try {
-            initTenantTable();
+            initTenantTable(schema);
         }catch (Exception e) {
             log.error(e.getMessage());
             return false;
@@ -29,13 +28,12 @@ public class DatabaseService {
         return true;
     }
 
-    private Boolean initTenantTable() throws IOException, SQLException {
-        String databaseName = TenantContextHolder.getDatabaseName();
+    private Boolean initTenantTable(String schema) throws IOException, SQLException {
 
         Connection connection = databaseComponent.getConnection();
-        databaseComponent.changeDatabase(databaseName, connection);
+        databaseComponent.changeDatabase(schema, connection);
 
-        Integer tableCount = databaseComponent.tableCount(databaseName, connection);
+        Integer tableCount = databaseComponent.tableCount(schema, connection);
 
         if (tableCount > 0) {
             return true;

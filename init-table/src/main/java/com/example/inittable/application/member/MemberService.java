@@ -1,7 +1,7 @@
-package com.example.jpa.application.member;
+package com.example.inittable.application.member;
 
-import com.example.jpa.domain.member.Member;
-import com.example.jpa.domain.member.MemberRepository;
+import com.example.inittable.domain.member.Member;
+import com.example.inittable.domain.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

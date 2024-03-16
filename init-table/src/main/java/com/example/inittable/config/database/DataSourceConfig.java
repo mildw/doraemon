@@ -1,4 +1,4 @@
-package com.example.jpa.config.database;
+package com.example.inittable.config.database;
 
 
 import com.zaxxer.hikari.HikariConfig;
@@ -27,7 +27,7 @@ import java.util.Properties;
 
 @Configuration
 @RequiredArgsConstructor
-@EnableJpaRepositories(basePackages = {"com.example.jpa.domain"})
+@EnableJpaRepositories(basePackages = {"com.example.inittable.domain"})
 public class DataSourceConfig {
 
     private final ConfigurableEnvironment environment;
