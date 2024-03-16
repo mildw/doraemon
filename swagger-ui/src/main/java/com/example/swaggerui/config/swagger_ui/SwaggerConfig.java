@@ -1,0 +1,96 @@
+package com.example.swaggerui.config.swagger_ui;
+
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;  
+import io.swagger.v3.oas.models.info.Info;  
+import io.swagger.v3.oas.models.media.StringSchema;  
+import io.swagger.v3.oas.models.parameters.HeaderParameter;  
+import io.swagger.v3.oas.models.security.SecurityRequirement;  
+import io.swagger.v3.oas.models.security.SecurityScheme;  
+import io.swagger.v3.oas.models.servers.Server;  
+import lombok.RequiredArgsConstructor;  
+import org.springdoc.core.GroupedOpenApi;  
+import org.springdoc.core.SpringDocUtils;  
+import org.springdoc.core.customizers.OpenApiCustomiser;  
+import org.springframework.context.annotation.Bean;  
+import org.springframework.context.annotation.Configuration;  
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.CookieValue;  
+  
+import java.time.LocalDate;  
+import java.time.LocalDateTime;  
+import java.time.LocalTime;  
+  
+@Configuration  
+@RequiredArgsConstructor  
+public class SwaggerConfig {  
+
+    static {  
+        SpringDocUtils.getConfig()  
+                .replaceWithClass(LocalDateTime.class, String.class)  
+                .replaceWithClass(LocalDate.class, String.class)  
+                .replaceWithClass(LocalTime.class, String.class)  
+                .addAnnotationsToIgnore(AuthenticationPrincipal.class, CookieValue.class);
+    }  
+  
+    @Bean  
+    public GroupedOpenApi cms() {  
+        return GroupedOpenApi.builder()  
+                .group("그룹1")
+                .pathsToExclude("/internal-api/**")  
+                .addOpenApiCustomiser(openApiCustomiser())  
+                .build();  
+    }  
+  
+    @Bean  
+    public GroupedOpenApi internalApi() {  
+        return GroupedOpenApi.builder()  
+                .group("그룹2")
+                .pathsToMatch("/internal-api/**")  
+                .addOpenApiCustomiser(openInternalApiCustomiser())  
+                .build();  
+    }  
+  
+    @Bean  
+    public OpenAPI getOpenApi() {  
+        final String securitySchemeName = "bearerAuth";  
+  
+        return new OpenAPI()  
+                .info(new Info().title("테스트 API"))
+                .addServersItem(new Server().url("/"))  
+                .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))  
+                .components(new Components()  
+                        .addSecuritySchemes(securitySchemeName, new SecurityScheme()  
+                                .name(securitySchemeName)  
+                                .type(SecurityScheme.Type.HTTP)  
+                                .scheme("bearer")  
+                                .bearerFormat("JWT")));  
+    }  
+  
+    private OpenApiCustomiser openApiCustomiser() {  
+
+        return openApi -> openApi  
+                .getPaths().values().stream()  
+                .flatMap(pathItem -> pathItem.readOperations().stream())  
+                .forEach(operation -> operation  
+                        .addParametersItem(new HeaderParameter()  
+                                .name("Test-Header")
+                                .schema(new StringSchema()._default("TestHeaderValue"))
+                                .required(Boolean.TRUE)  
+                                .description("테스트 헤더"))
+                );  
+    }  
+  
+    private OpenApiCustomiser openInternalApiCustomiser() {  
+        return openApi -> openApi  
+                .getPaths().values().stream()  
+                .flatMap(pathItem -> pathItem.readOperations().stream())  
+                .forEach(operation -> operation  
+                        .addParametersItem(new HeaderParameter()  
+                                .name("Tenant-Key")  
+                                .schema(new StringSchema()._default("tenantKey"))
+                                .required(Boolean.TRUE)  
+                                .description("테넌트 키"))  
+                );  
+    }  
+}
