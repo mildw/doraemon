@@ -1,0 +1,11 @@
+spring:
+  profiles:
+    active: ${spring.profiles.default:local}
+
+server:
+  port: 8081
+  error:
+    whitelabel:
+      enabled: false
+  tomcat:
+    use-relative-redirects: true
