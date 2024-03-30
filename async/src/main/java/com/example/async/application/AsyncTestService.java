@@ -1,5 +1,6 @@
 package com.example.async.application;
 
+import com.example.async.domain.tenant.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,10 +17,10 @@ public class AsyncTestService {
         ExecutorService executor = Executors.newCachedThreadPool();
 
         CompletableFuture<String>[] futures = new CompletableFuture[3];
-        for(int i=0; i<3; i++) {
+        for (int i = 0; i < 3; i++) {
             futures[i] = CompletableFuture.supplyAsync(() -> {
                 System.out.println("call");
-                return requestService.request();
+                return requestService.requestAndSaveData();
             }, executor);
         }
         CompletableFuture<Void> allOfFuture = CompletableFuture.allOf(futures);

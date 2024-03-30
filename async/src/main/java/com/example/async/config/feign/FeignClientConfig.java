@@ -39,7 +39,7 @@ public class FeignClientConfig {
     @Bean
     public Retryer feignRetryer() {
         // 재시도 간격(ms), 최대 재시도 횟수 설정
-        return new Retryer.Default(100, 1000, 5);
+        return new Retryer.Default(100, 1000, 1);
     }
 
 }

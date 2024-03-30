@@ -9,3 +9,13 @@ server:
       enabled: false
   tomcat:
     use-relative-redirects: true
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+
+
+logging:
+  level:
+    org.springframework.orm.jpa: DEBUG
+    com.zaxxer.hikari: DEBUG
