@@ -51,6 +51,8 @@ dependencies {
 	implementation platform('software.amazon.awssdk:bom:2.17.162')
 	implementation 'software.amazon.awssdk:s3'
 	implementation 'software.amazon.awssdk:s3-transfer-manager:2.17.123-PREVIEW'
+	// RDS proxy
+	implementation 'io.awspring.cloud:spring-cloud-starter-aws-secrets-manager-config:2.4.4'
 
 }
 

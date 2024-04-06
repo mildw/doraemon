@@ -1,8 +1,14 @@
 package com.example.springcloudfunction.config.database;
 
+import com.amazonaws.services.secretsmanager.AWSSecretsManager;
+import com.amazonaws.services.secretsmanager.AWSSecretsManagerClientBuilder;
+import com.amazonaws.services.secretsmanager.model.GetSecretValueRequest;
+import com.amazonaws.services.secretsmanager.model.GetSecretValueResult;
+import com.example.core.util.ObjectMapperUtils;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.dialect.InnoDBStorageEngine;
@@ -11,8 +17,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -21,9 +25,9 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
-import java.util.Arrays;
 import java.util.Properties;
 
+@Slf4j
 @Configuration
 @RequiredArgsConstructor
 @EnableJpaRepositories(basePackages = {"com.example.springcloudfunction.domain"})
@@ -38,14 +42,34 @@ public class DataSourceConfig {
     @Value("${DB_PASSWORD}")
     private String dbPassword;
 
+    @Value("${SECRET_NAME}")
+    private String secretName;
     @Bean
     public HikariConfig hikariConfig() {
+        if(secretName != null && !secretName.isBlank()) {
+            AwsSecrets awsSecrets = getSecretValue(secretName);
+            dbUsername = awsSecrets.getUsername();
+            dbPassword = awsSecrets.getPassword();
+        }
+
         HikariDataSource dataSource = new HikariDataSource();
         dataSource.setJdbcUrl(dbUrl);
         dataSource.setUsername(dbUsername);
         dataSource.setPassword(dbPassword);
         dataSource.setMaximumPoolSize(1);
         return dataSource;
+    }
+
+    private AwsSecrets getSecretValue(String secretName) {
+        AWSSecretsManager client = AWSSecretsManagerClientBuilder.standard().build();
+        GetSecretValueRequest request = new GetSecretValueRequest().withSecretId(secretName);
+        GetSecretValueResult result = client.getSecretValue(request);
+        String secretString = result.getSecretString();
+        if(secretString == null) {
+            throw new RuntimeException();
+        }
+
+        return ObjectMapperUtils.readValue(secretString, AwsSecrets.class);
     }
 
     @Bean
