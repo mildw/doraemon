@@ -7,3 +7,8 @@ spring:
       password: "1111"
       pool-name: "hikariPool"
       maximum-pool-size: "1"
+
+bucket:
+  name: BUCKET_NAME
+  access-key: ACCESS_KEY
+  secret-key: SECRET_KEY

@@ -8,6 +8,7 @@ import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.core.async.AsyncRequestBody;
 import software.amazon.awssdk.core.async.AsyncResponseTransformer;
+import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.S3ClientBuilder;
 import software.amazon.awssdk.services.s3.model.*;
@@ -16,6 +17,7 @@ import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignReques
 import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
 import software.amazon.awssdk.transfer.s3.*;
 
+import java.nio.ByteBuffer;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +42,40 @@ public class S3Utils {
         PresignedGetObjectRequest presignedGetObjectRequest = s3Presigner.presignGetObject(getObjectPresignRequest);
 
         return presignedGetObjectRequest.url().toString();
+    }
+
+    public static void tempFileUpload(Bucket bucket, String key, byte[] bytes) {
+        S3Client s3Client = getS3Client(bucket);
+        setLifecyclePolicy(s3Client, key, bucket.getBucketName());
+
+        ByteBuffer byteBuffer = ByteBuffer.wrap(bytes);
+
+        PutObjectRequest request = PutObjectRequest.builder()
+                .bucket(bucket.getBucketName())
+                .key(key)
+                .contentLength((long) bytes.length)
+                .build();
+
+        s3Client.putObject(request, RequestBody.fromByteBuffer(byteBuffer));
+    }
+
+    public static void setLifecyclePolicy(S3Client s3Client, String key, String bucketName) {
+
+        List<LifecycleRule> rules = List.of(
+                LifecycleRule.builder()
+                        .id("ExpirationRule")
+                        .filter(LifecycleRuleFilter.builder().prefix(key).build())
+                        .expiration(LifecycleExpiration.builder().days(1).build())
+                        .status(ExpirationStatus.ENABLED)
+                        .build()
+        );
+
+        PutBucketLifecycleConfigurationRequest request = PutBucketLifecycleConfigurationRequest.builder()
+                .bucket(bucketName)
+                .lifecycleConfiguration(BucketLifecycleConfiguration.builder().rules(rules).build())
+                .build();
+
+        s3Client.putBucketLifecycleConfiguration(request);
     }
 
     public static boolean upload(Bucket bucket, String key, byte[] bytes) {

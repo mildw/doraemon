@@ -1,9 +1,13 @@
 package com.example.excel.application.member;
 
+import com.example.core.s3.Bucket;
+import com.example.core.s3.S3Utils;
 import com.example.excel.application.excel.ExcelTemplate;
+import com.example.excel.config.property.BucketProperty;
 import com.example.excel.domain.member.Member;
 import com.example.excel.domain.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -17,10 +21,12 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MemberService {
 
+    private final BucketProperty bucketProperty;
     private final MemberRepository memberRepository;
 
     public String getMemberNames() {
@@ -48,5 +54,27 @@ public class MemberService {
         } catch (Exception e) {
             throw new RuntimeException();
         }
+    }
+
+    public String tempFileUpload() {
+        String tempName = "temp.xlsx";
+        try {
+            ExcelTemplate excelTemplate = new ExcelTemplate();
+            Workbook workbook = excelTemplate.createExcelTemplate();
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            workbook.write(outputStream);
+            byte[] bytes = outputStream.toByteArray();
+            outputStream.close();
+            Bucket bucket = new Bucket(
+                    bucketProperty.getName(),
+                    bucketProperty.getAccessKey(),
+                    bucketProperty.getSecretKey()
+            );
+            S3Utils.tempFileUpload(bucket, tempName, bytes);
+        } catch (Exception e) {
+            log.error(e.getMessage(), "에러입니다.");
+            tempName = null;
+        }
+        return tempName;
     }
 }

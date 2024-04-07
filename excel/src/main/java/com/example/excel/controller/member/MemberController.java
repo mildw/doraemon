@@ -25,4 +25,9 @@ public class MemberController {
     public ResponseEntity<Resource> excel() {
         return memberService.excel();
     }
+
+    @GetMapping("/temp-file-upload")
+    public String tempFileUpload() {
+        return memberService.tempFileUpload();
+    }
 }
