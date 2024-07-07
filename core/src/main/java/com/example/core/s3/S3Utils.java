@@ -18,6 +18,7 @@ import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequ
 import software.amazon.awssdk.transfer.s3.*;
 
 import java.nio.ByteBuffer;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -109,6 +110,24 @@ public class S3Utils {
         } catch (Exception exception) {
             throw new RuntimeException();
         }
+    }
+
+    public void downloadToLocal(Bucket bucket, String key) {
+        S3Client client = getS3Client(bucket);
+        GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+                .bucket(bucket.getBucketName())
+                .key(key)
+                .build();
+        client.getObject(getObjectRequest, Paths.get(key));
+    }
+
+    public void uploadFromLocal(Bucket bucket, String key) {
+        S3Client client = getS3Client(bucket);
+        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                .bucket(bucket.getBucketName())
+                .key(key)
+                .build();
+        client.putObject(putObjectRequest, Paths.get(key));
     }
 
     public static void delete(Bucket bucket, String key) {
