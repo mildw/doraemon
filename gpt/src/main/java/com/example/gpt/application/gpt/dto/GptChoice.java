@@ -9,5 +9,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class GptChoice {
     private int index;
-    private GptMessage gptMessage;
+    private GptMessage message;
+    private String finish_reason;
 }

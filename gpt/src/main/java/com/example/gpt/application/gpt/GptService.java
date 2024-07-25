@@ -16,7 +16,7 @@ public class GptService {
 
     public String gptChat(String prompt) {
         GptRs rs = requestGptWork(prompt);
-        return rs.getGptChoices().get(0).getGptMessage().getContent();
+        return rs.getChoices().get(0).getMessage().getContent();
     }
 
     public String geminiChat(String prompt) {
@@ -26,8 +26,8 @@ public class GptService {
 
     private GptRs requestGptWork(String prompt) {
         String model = "gpt-3.5-turbo";
-        String apiKey = "";
-        GptRq rq = new GptRq(model, prompt);
+        String apiKey = "api-key";
+        GptRq rq = new GptRq(model, false, prompt);
         GptRs rs = gptClient.chat("Bearer " + apiKey, rq);
         return rs;
     }

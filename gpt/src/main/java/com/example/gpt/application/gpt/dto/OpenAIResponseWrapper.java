@@ -7,15 +7,11 @@ import lombok.Setter;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GptRs {
-    private String id;
-    private String object;
-    private String created;
-    private String model;
-    private List<GptChoice> choices;
-    private GptUsage usage;
+public class OpenAIResponseWrapper {
+    private List<OpenAIResponse> responses;
+
+    // getters and setters
 }

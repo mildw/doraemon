@@ -12,14 +12,16 @@ import java.util.List;
 @AllArgsConstructor
 public class GptRq {
     private String model;
-    private List<GptMessage> gptMessages;
+    private List<GptMessage> messages;
+    private Boolean stream;
 //    private int n;
 //    private double temperature;
 
-    public GptRq(String model, String prompt) {
+    public GptRq(String model, boolean stream, String prompt) {
         this.model = model;
-        this.gptMessages = new ArrayList<>();
+        this.messages = new ArrayList<>();
 //        this.n = 0;
-        this.gptMessages.add(new GptMessage("user", prompt));
+        this.messages.add(new GptMessage("user", prompt));
+        this.stream = stream;
     }
 }
